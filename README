@@ -1,0 +1,47 @@
+
+High Level Approach:
+
+...http.py:
+...1. Form HTTP GET message.
+...2. Send GET message via TCP socket.
+...3. Parse HTTP header.
+...4. Get HTTP response.
+...5. Unzip HTTP response which is gzip encoded.
+
+...transport.py
+...1. Assemble and Disassemble TCP Packet
+...2. Perform 3 way hand shake
+...3. Tear down connection
+...4. Send TCP Packets through IP socket
+...5. Receive TCP Packets through IP socket
+...6. Provide TCP socket interface
+
+...network.py
+...1. Assemble and Disassemble IP packet
+...2. Send IP packet via ethernet socket
+...3. Receive IP packet via ethernet socket
+...4. Analyze IP packet
+...5. Provide IP socket interface
+
+...ethernet.py
+...1. Assemble and Disassemble Ethernet packet
+...2. Perform ARP request and receive ARP reply
+...3. Find network gateway's MAC address
+...4. Send IP packets to network gateway via ethernet socket
+...5. Receive IP packets from gateway via ethernet socket
+...6. Provide an ethernet socket interface
+
+...utility.py
+...1. Provide IP and MAC address of given network interface
+...2. Provide Network Gateway IP address
+
+
+Challenges:
+
+...1. Find out how raw sockets work. We need two raw sockets one for sending the other for receiving.
+...2. Raw socket for sending typically doesn't need any additional arguments, we can just send a raw packet through it.
+...3. Raw socket for receiving needs one additional argument to specify the kind of packet to receive. Then the kernel will return all packets match the argument.
+...4. Since TCP is a reliable connection and we need to ack every packet, we have to determine how long to wait until returning the data to upper layer.
+...5. Using non-blocking socket, we need to take care of the exception raised by the socket. Sometimes it means there's no packet, sometimes it just means the packet hasn't arrived.
+...6. Finding the local gateway IP address.
+...7. Implementing the Arp protocol.
