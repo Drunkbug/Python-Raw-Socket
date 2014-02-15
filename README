@@ -36,12 +36,3 @@ High Level Approach:
 ...2. Provide Network Gateway IP address
 
 
-Challenges:
-
-...1. Find out how raw sockets work. We need two raw sockets one for sending the other for receiving.
-...2. Raw socket for sending typically doesn't need any additional arguments, we can just send a raw packet through it.
-...3. Raw socket for receiving needs one additional argument to specify the kind of packet to receive. Then the kernel will return all packets match the argument.
-...4. Since TCP is a reliable connection and we need to ack every packet, we have to determine how long to wait until returning the data to upper layer.
-...5. Using non-blocking socket, we need to take care of the exception raised by the socket. Sometimes it means there's no packet, sometimes it just means the packet hasn't arrived.
-...6. Finding the local gateway IP address.
-...7. Implementing the Arp protocol.
